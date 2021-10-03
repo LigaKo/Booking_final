@@ -28,7 +28,7 @@ public class Destination {
         for (Destination destination : destinations)
             System.out.println("\t" + destination);
         while (true){
-            System.out.println("Select the bus route (Enter available bus ID: ");
+            System.out.println("Select the bus route (Enter available bus ID): ");
             int busID = scanner.nextInt();
             for (Destination destination : destinations) {
                 if (destination.getBusID() == busID) {

@@ -34,6 +34,9 @@ public class Main {
                 int busID = Destination.getValidBusID(destinations);
                 scanner.nextLine();
 
+                Seats seats = new Seats();
+                int seatNumber = seats.seatSelection(busID);
+
                 System.out.print("Enter passenger's name: ");
                 String name = scanner.nextLine().trim().toUpperCase();
 
@@ -86,12 +89,12 @@ public class Main {
                 double discount = Double.parseDouble(destination.getPrice().replace(',', '.')) -
                         (Double.parseDouble(destination.getPrice().replace(',', '.')) *
                                 passenger.getTicketType().getDiscountPercentage().doubleValue() / 100);
-                System.out.println(passenger + " , Ticket Price: " + String.format("%.2f", discount) + " EUR");
+                System.out.println(passenger + ", Ticket Price: " + String.format("%.2f", discount) + " EUR," + " Seat: " + seatNumber);
                 System.out.print("\nWould you like to confirm the booking? (Yes = 1), (No = 2): ");
                 int book = scanner.nextInt();
                 if (book == 1) {
                     bookTicket(passenger, destination,
-                            Double.parseDouble(String.valueOf(discount)));
+                            Double.parseDouble(String.valueOf(discount)), busID, seatNumber);
                     System.out.println("Ticket booked. Thank you!");
                 }
                 else
@@ -101,16 +104,17 @@ public class Main {
                 System.out.println("[!] Username/password is incorrect, please try again");
             }
         }
+
     }
 
     private static void bookTicket(Passengers passenger, Destination destination,
-                                   double price) throws Exception {
+                                   double price, int busID, int seatNumber) throws Exception {
         DB db = new DB();
         db.preStatement = db.connection.prepareStatement("SET GLOBAL time_zone = '+3:00';");
         db.preStatement.executeUpdate();
         db.preStatement = db.connection.prepareStatement("INSERT INTO ticket_info(name,surname,phoneNumber," +
-                "email,destination,date,time,ticketType,discountAmount,ticketPrice)VALUES" +
-                "(?,?,?,?,?,?,?,?,?,?)");
+                "email,destination,date,time,ticketType,discountAmount,ticketPrice, busID, seatNumber)VALUES" +
+                "(?,?,?,?,?,?,?,?,?,?,?,?)");
         db.preStatement.setString(1, passenger.getName());
         db.preStatement.setString(2, passenger.getSurname());
         db.preStatement.setString(3, passenger.getPhoneNumber());
@@ -121,6 +125,8 @@ public class Main {
         db.preStatement.setString(8, passenger.getTicketType().getInfo());
         db.preStatement.setDouble(9, Double.parseDouble(String.valueOf(passenger.getTicketType().getDiscountPercentage())));
         db.preStatement.setDouble(10, price);
+        db.preStatement.setInt(11, busID);
+        db.preStatement.setInt(12, seatNumber);
         db.preStatement.executeUpdate();
     }
 
