@@ -77,7 +77,7 @@ public class Seats {
     }
 
     public void showSeatsAvailability(ArrayList<Integer> seatsTaken){
-        System.out.print("\nSeats available: ");
+        System.out.print("\n\tAvailable seats: ");
 
         for(int seat = 1; seat <= 20; seat++){
             if (!seatsTaken.contains(seat)) {

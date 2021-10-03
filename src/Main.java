@@ -49,7 +49,7 @@ public class Main {
 
                     email = scanner.nextLine().trim().toUpperCase();
 
-                    Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+                    Pattern pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)+[\\w-]{2,4}$");
                     Matcher matcher = pattern.matcher(email);
 
                     emailMatches = matcher.matches();
